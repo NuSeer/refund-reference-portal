@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refund Reference Portal — Index</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1e2540;--surface:#273058;--surface2:#2e3865;--border:#404e80;
+  --text:#eef2ff;--text2:#c8d4f0;--gray:#a0aac8;
+  --accent:#e8973a;--accent2:#0ea8f0;
+  --sans:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
+
+/* HEADER */
+.hdr{
+  background:var(--surface);border-bottom:3px solid var(--accent);
+  padding:18px 32px;position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  box-shadow:0 2px 20px rgba(0,0,0,.3);
+}
+.hdr-brand{flex:1;min-width:200px}
+.hdr-title{font-size:18px;font-weight:700;color:var(--text)}
+.hdr-sub{font-size:12px;color:var(--gray);font-family:var(--mono);margin-top:3px}
+.search-wrap{position:relative;width:340px}
+.search-input{
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:var(--sans);
+  font-size:14px;padding:10px 14px 10px 38px;outline:none;
+  transition:border-color .15s;
+}
+.search-input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(14,168,240,.1)}
+.search-input::placeholder{color:var(--gray)}
+.si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:16px;pointer-events:none}
+.open-btn{
+  background:var(--accent);color:#fff;border:none;border-radius:8px;
+  padding:10px 18px;font-size:13.5px;font-weight:600;font-family:var(--sans);
+  cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:opacity .15s;
+}
+.open-btn:hover{opacity:.85}
+
+/* BODY */
+.body{padding:28px 32px;max-width:1440px;margin:0 auto}
+
+/* STATS */
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.stat{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:10px 18px;text-align:center;min-width:90px;
+}
+.stat-n{font-size:26px;font-weight:700;color:var(--accent);font-family:var(--mono);line-height:1}
+.stat-l{font-size:11px;color:var(--gray);margin-top:4px}
+
+/* FILTERS */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.fp{
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text2);border-radius:22px;padding:7px 15px;
+  font-size:12.5px;font-family:var(--sans);cursor:pointer;
+  transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:6px;
+}
+.fp:hover{background:var(--surface2);color:var(--text)}
+.fp.active{font-weight:600;color:var(--text)}
+.fp .badge{font-size:10.5px;opacity:.7;font-family:var(--mono)}
+
+/* SEARCH RESULTS COUNT */
+.result-bar{
+  font-size:12.5px;color:var(--gray);font-family:var(--mono);
+  margin-bottom:16px;min-height:18px;
+}
+.result-bar span{color:var(--accent2)}
+
+/* GROUP */
+.grp{margin-bottom:40px}
+.grp.hidden{display:none}
+.grp-hdr{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-radius:8px;margin-bottom:14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-left-width:4px;
+}
+.grp-icon{font-size:20px}
+.grp-info{flex:1}
+.grp-name{font-size:15px;font-weight:700}
+.grp-desc{font-size:12px;color:var(--text2);margin-top:2px}
+.grp-badge{
+  background:var(--surface2);border-radius:12px;
+  padding:3px 10px;font-size:11.5px;font-family:var(--mono);color:var(--gray);
+}
+
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:16px 16px 14px;
+  cursor:pointer;transition:all .15s;text-decoration:none;
+  display:block;position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--c,var(--accent2));
+  border-radius:10px 0 0 10px;
+}
+.card:hover{
+  background:var(--surface2);border-color:var(--c,var(--accent2));
+  transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.25);
+}
+.card.hidden{display:none}
+.card-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.card-ico{font-size:22px;flex-shrink:0;line-height:1}
+.card-name{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.35}
+.card-desc{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:10px}
+.card-tag{
+  display:inline-block;font-size:10px;font-family:var(--mono);
+  color:var(--gray);background:var(--surface2);
+  border-radius:4px;padding:2px 7px;text-transform:uppercase;letter-spacing:.05em;
+}
+
+/* NO RESULTS */
+.no-res{display:none;text-align:center;padding:80px 20px;color:var(--gray)}
+.no-res-ico{font-size:48px;margin-bottom:12px}
+.no-res-txt{font-size:16px}
+.no-res-sub{font-size:13px;margin-top:6px;color:var(--gray)}
+
+/* FOOTER */
+.ftr{
+  text-align:center;padding:20px;color:var(--gray);
+  font-size:11.5px;font-family:var(--mono);
+  border-top:1px solid var(--border);margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-title">📚 Refund Reference Portal — Section Index</div>
+    <div class="hdr-sub">Credits &amp; Refunds &nbsp;·&nbsp; 44 sections across 9 groups &nbsp;·&nbsp; Created by Joy Watford</div>
+  </div>
+  <div class="search-wrap">
+    <span class="si">🔍</span>
+    <input class="search-input" id="q" type="text" placeholder="Search sections, codes, topics…" oninput="search()" autocomplete="off">
+  </div>
+  <a class="open-btn" href="refund_team_dashboard.html">Open Portal →</a>
+</header>
+
+<div class="body">
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n">44</div><div class="stat-l">Sections</div></div>
+    <div class="stat"><div class="stat-n">9</div><div class="stat-l">Groups</div></div>
+    <div class="stat"><div class="stat-n">101</div><div class="stat-l">AR Codes</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">COB Rules</div></div>
+    <div class="stat"><div class="stat-n">3</div><div class="stat-l">OV Calcs</div></div>
+    <div class="stat"><div class="stat-n">35</div><div class="stat-l">Stat Days</div></div>
+    <div class="stat"><div class="stat-n">12%</div><div class="stat-l">Interest Rate</div></div>
+    <div class="stat"><div class="stat-n">30</div><div class="stat-l">Mo. Lookback</div></div>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="fp active" data-g="all" onclick="filter('all',this)">All &nbsp;<span class="badge">(44)</span></button>
+    <button class="fp" data-g="Overview" onclick="filter('Overview',this)" style="border-color:#e8973a33"><span>🏠</span> Overview <span class="badge">(2)</span></button>
+    <button class="fp" data-g="Process" onclick="filter('Process',this)" style="border-color:#0ea8f033"><span>⚙️</span> Process <span class="badge">(5)</span></button>
+    <button class="fp" data-g="Research & Routing" onclick="filter('Research & Routing',this)" style="border-color:#9b6ef533"><span>🔍</span> Research & Routing <span class="badge">(12)</span></button>
+    <button class="fp" data-g="Team Standards" onclick="filter('Team Standards',this)" style="border-color:#2dbf8a33"><span>📋</span> Team Standards <span class="badge">(6)</span></button>
+    <button class="fp" data-g="Calculations" onclick="filter('Calculations',this)" style="border-color:#f5c84233"><span>🔢</span> Calculations <span class="badge">(4)</span></button>
+    <button class="fp" data-g="Compliance" onclick="filter('Compliance',this)" style="border-color:#e8545433"><span>⚖️</span> Compliance <span class="badge">(2)</span></button>
+    <button class="fp" data-g="Unsolicited Refunds" onclick="filter('Unsolicited Refunds',this)" style="border-color:#3d9be833"><span>💵</span> Unsolicited Refunds <span class="badge">(4)</span></button>
+    <button class="fp" data-g="Special Scenarios" onclick="filter('Special Scenarios',this)" style="border-color:#ff8a5033"><span>🔀</span> Special Scenarios <span class="badge">(7)</span></button>
+    <button class="fp" data-g="Notes" onclick="filter('Notes',this)" style="border-color:#a0aac833"><span>📌</span> Notes <span class="badge">(2)</span></button>
+  </div>
+
+  <div class="result-bar" id="rbar"></div>
+  <div class="no-res" id="nores"><div class="no-res-ico">🔍</div><div class="no-res-txt">No sections found</div><div class="no-res-sub">Try different keywords or clear the search</div></div>
+
+  <div class="grp" id="grp-Overview" data-g="Overview">
+    <div class="grp-hdr" style="border-left-color:#e8973a">
+      <span class="grp-icon">🏠</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#e8973a">Overview</div>
+        <div class="grp-desc">Starting points and key reference stats</div>
+      </div>
+      <span class="grp-badge">2 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#home"
+         style="--c:#e8973a"
+         data-name="home — process finder"
+         data-desc="quick decision guide, process finder search, cms cob search, and key statutory stats at a glance."
+         data-tags="process finder search quick decision payer reference"
+         data-g="Overview">
+        <div class="card-head">
+          <span class="card-ico">🏠</span>
+          <div class="card-name">Home — Process Finder</div>
+        </div>
+        <div class="card-desc">Quick Decision Guide, Process Finder search, CMS COB search, and key statutory stats at a glance.</div>
+        <span class="card-tag">Overview</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#terminology"
+         style="--c:#e8973a"
+         data-name="terminology"
+         data-desc="definitions for every term — rr, retraction, cob, recoupment, har, retracting payer, correspondence record, and more."
+         data-tags="definitions terms glossary vocabulary"
+         data-g="Overview">
+        <div class="card-head">
+          <span class="card-ico">📖</span>
+          <div class="card-name">Terminology</div>
+        </div>
+        <div class="card-desc">Definitions for every term — RR, Retraction, COB, Recoupment, HAR, Retracting Payer, Correspondence Record, and more.</div>
+        <span class="card-tag">Overview</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grp" id="grp-Process" data-g="Process">
+    <div class="grp-hdr" style="border-left-color:#0ea8f0">
+      <span class="grp-icon">⚙️</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#0ea8f0">Process</div>
+        <div class="grp-desc">Workflow lanes, Epic sequences, checklists, and note templates</div>
+      </div>
+      <span class="grp-badge">5 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#workflow"
+         style="--c:#0ea8f0"
+         data-name="refund workflow lanes"
+         data-desc="five lanes a–e covering every refund scenario: retracting payer · vague reason · coverage termed · post-paid audit · cob secondary."
+         data-tags="lanes workflow steps sequence"
+         data-g="Process">
+        <div class="card-head">
+          <span class="card-ico">⚙️</span>
+          <div class="card-name">Refund Workflow Lanes</div>
+        </div>
+        <div class="card-desc">Five lanes A–E covering every refund scenario: Retracting Payer · Vague Reason · Coverage Termed · Post-Paid Audit · COB Secondary.</div>
+        <span class="card-tag">Process</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#steps"
+         style="--c:#0ea8f0"
+         data-name="refund process steps"
+         data-desc="full epic activity sequence for processing a refund approval — exact codes, bucket activities, and sequencing rules in order."
+         data-tags="epic activity sequence codes steps approval"
+         data-g="Process">
+        <div class="card-head">
+          <span class="card-ico">📋</span>
+          <div class="card-name">Refund Process Steps</div>
+        </div>
+        <div class="card-desc">Full Epic activity sequence for processing a refund approval — exact codes, bucket activities, and sequencing rules in order.</div>
+        <span class="card-tag">Process</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#worked_example"
+         style="--c:#0ea8f0"
+         data-name="worked example"
+         data-desc="real account walkthrough (cvs health/accendo $816 overpayment) showing each epic activity row in sequence."
+         data-tags="example walkthrough real account cvs"
+         data-g="Process">
+        <div class="card-head">
+          <span class="card-ico">🟡</span>
+          <div class="card-name">Worked Example</div>
+        </div>
+        <div class="card-desc">Real account walkthrough (CVS Health/Accendo $816 overpayment) showing each Epic activity row in sequence.</div>
+        <span class="card-tag">Process</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#checklist"
+         style="--c:#0ea8f0"
+         data-name="checklists"
+         data-desc="interactive pre-approval and post-approval checklists. click items to check off as you work through each account."
+         data-tags="checklist pre approval post approval"
+         data-g="Process">
+        <div class="card-head">
+          <span class="card-ico">✅</span>
+          <div class="card-name">Checklists</div>
+        </div>
+        <div class="card-desc">Interactive pre-approval and post-approval checklists. Click items to check off as you work through each account.</div>
+        <span class="card-tag">Process</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#templates"
+         style="--c:#0ea8f0"
+         data-name="note templates"
+         data-desc="copy-ready epic note templates — overpayment calc, coverage change, retraction approved, contest, denial, correspondence update."
+         data-tags="copy templates notes epic paste"
+         data-g="Process">
+        <div class="card-head">
+          <span class="card-ico">📝</span>
+          <div class="card-name">Note Templates</div>
+        </div>
+        <div class="card-desc">Copy-ready Epic note templates — overpayment calc, coverage change, retraction approved, contest, denial, correspondence update.</div>
+        <span class="card-tag">Process</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grp" id="grp-Research_and_Routing" data-g="Research & Routing">
+    <div class="grp-hdr" style="border-left-color:#9b6ef5">
+      <span class="grp-icon">🔍</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#9b6ef5">Research &amp; Routing</div>
+        <div class="grp-desc">Routing decisions, activity codes, correspondence, and special research cases</div>
+      </div>
+      <span class="grp-badge">12 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#routing"
+         style="--c:#9b6ef5"
+         data-name="dept routing guide"
+         data-desc="which department handles which issue — him · cdi · ri · pfs · refund staff. denial wq codes included."
+         data-tags="routing departments him cdi ri pfs denial wq"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">🔀</span>
+          <div class="card-name">Dept Routing Guide</div>
+        </div>
+        <div class="card-desc">Which department handles which issue — HIM · CDI · RI · PFS · Refund Staff. Denial WQ codes included.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#acct_activities"
+         style="--c:#9b6ef5"
+         data-name="account activities"
+         data-desc="all epic hb account activity codes used by the refund team with descriptions and when to use each one."
+         data-tags="activity codes epic account 108483 108484 108597 108219"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">⚡</span>
+          <div class="card-name">Account Activities</div>
+        </div>
+        <div class="card-desc">All Epic HB account activity codes used by the refund team with descriptions and when to use each one.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#undistributed"
+         style="--c:#9b6ef5"
+         data-name="undistributed wq 50443"
+         data-desc="payments with no available bucket. step-by-step for each scenario — paper eob, electronic, duplicate payment."
+         data-tags="undistributed wq 50443 payments bucket"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">💳</span>
+          <div class="card-name">Undistributed WQ 50443</div>
+        </div>
+        <div class="card-desc">Payments with no available bucket. Step-by-step for each scenario — paper EOB, electronic, duplicate payment.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#balance_sheet"
+         style="--c:#9b6ef5"
+         data-name="balance sheet"
+         data-desc="end of day balance sheet format, column setup, and instructions. required every day a refund is entered."
+         data-tags="balance sheet end of day daily"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">📊</span>
+          <div class="card-name">Balance Sheet</div>
+        </div>
+        <div class="card-desc">End of day balance sheet format, column setup, and instructions. Required every day a refund is entered.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#research"
+         style="--c:#9b6ef5"
+         data-name="complex research"
+         data-desc="bundling issues, $0 eob, wrong claim, availity badge responses, multi-har same-patient accounts."
+         data-tags="complex research bundling zero eob wrong claim"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">🔍</span>
+          <div class="card-name">Complex Research</div>
+        </div>
+        <div class="card-desc">Bundling issues, $0 EOB, wrong claim, Availity badge responses, multi-HAR same-patient accounts.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#letter_workflows"
+         style="--c:#9b6ef5"
+         data-name="letter workflows & action steps"
+         data-desc="contest · deny · approve · close — all payer types with full step-by-step and all activity codes. includes bcbs/humana availity paths and contest letter wording."
+         data-tags="contest deny approve close 108483 108484 108597 108259 569 572 573 90 177 144 146 1058 1059"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">✉️</span>
+          <div class="card-name">Letter Workflows & Action Steps</div>
+        </div>
+        <div class="card-desc">Contest · Deny · Approve · Close — all payer types with full step-by-step and all activity codes. Includes BCBS/Humana Availity paths and contest letter wording.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#correspondence_tip"
+         style="--c:#9b6ef5"
+         data-name="correspondence records"
+         data-desc="how to update correspondence in epic — all status codes, reason codes, owning areas, and deferral types."
+         data-tags="correspondence update status codes reason owning area 45082500404"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">📂</span>
+          <div class="card-name">Correspondence Records</div>
+        </div>
+        <div class="card-desc">How to update Correspondence in Epic — all status codes, reason codes, owning areas, and deferral types.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#cob_add_info"
+         style="--c:#9b6ef5"
+         data-name="cob & additional info"
+         data-desc="cob and additional info refund process. wq #65209 patient contact steps, coverage paths, and note templates."
+         data-tags="cob additional info wq 65209 patient contact letter"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">📋</span>
+          <div class="card-name">COB & Additional Info</div>
+        </div>
+        <div class="card-desc">COB and additional info refund process. WQ #65209 patient contact steps, coverage paths, and note templates.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#bundling_steps"
+         style="--c:#9b6ef5"
+         data-name="bundling steps"
+         data-desc="ncci bundling rules — 72-hour rule, inpatient/outpatient, bundling adjustment code 5061, retraction process."
+         data-tags="bundling ncci 72 hour inpatient outpatient 5061"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">🔗</span>
+          <div class="card-name">Bundling Steps</div>
+        </div>
+        <div class="card-desc">NCCI bundling rules — 72-hour rule, inpatient/outpatient, bundling adjustment code 5061, retraction process.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#med_records"
+         style="--c:#9b6ef5"
+         data-name="medical records flow"
+         data-desc="medical records sent with a refund request — required contest or denial response. pfs and roi steps."
+         data-tags="medical records roi required contest denial"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">🏥</span>
+          <div class="card-name">Medical Records Flow</div>
+        </div>
+        <div class="card-desc">Medical records sent with a refund request — required contest or denial response. PFS and ROI steps.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#drg_routing"
+         style="--c:#9b6ef5"
+         data-name="drg audit routing"
+         data-desc="drg change refund 8-step process and rac audit routing to him. what goes to denial wq vs. what does not."
+         data-tags="drg audit routing him rac drg change"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">🧬</span>
+          <div class="card-name">DRG Audit Routing</div>
+        </div>
+        <div class="card-desc">DRG Change refund 8-step process and RAC audit routing to HIM. What goes to Denial WQ vs. what does not.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#reindex_onbase"
+         style="--c:#9b6ef5"
+         data-name="reindex in onbase"
+         data-desc="how to re-index correspondence in onbase to the correct document type — step by step with screenshots."
+         data-tags="reindex onbase document type correspondence"
+         data-g="Research & Routing">
+        <div class="card-head">
+          <span class="card-ico">🗂️</span>
+          <div class="card-name">Reindex in OnBase</div>
+        </div>
+        <div class="card-desc">How to re-index correspondence in OnBase to the correct document type — step by step with screenshots.</div>
+        <span class="card-tag">Research & Routing</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grp" id="grp-Team_Standards" data-g="Team Standards">
+    <div class="grp-hdr" style="border-left-color:#2dbf8a">
+      <span class="grp-icon">📋</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#2dbf8a">Team Standards</div>
+        <div class="grp-desc">Daily tools, documenting rules, deferral codes, and reference tables</div>
+      </div>
+      <span class="grp-badge">6 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#daily_calc"
+         style="--c:#2dbf8a"
+         data-name="daily productivity calculator"
+         data-desc="calculate accounts per hour, shift totals, and hourly breakdown. enter your shift time and account target."
+         data-tags="productivity calculator shift accounts per hour"
+         data-g="Team Standards">
+        <div class="card-head">
+          <span class="card-ico">⏱️</span>
+          <div class="card-name">Daily Productivity Calculator</div>
+        </div>
+        <div class="card-desc">Calculate accounts per hour, shift totals, and hourly breakdown. Enter your shift time and account target.</div>
+        <span class="card-tag">Team Standards</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#notes_rules"
+         style="--c:#2dbf8a"
+         data-name="documenting rules"
+         data-desc="account note standards — invoice/claim # requirements, refund calc formatting, usps tracking, denial record review."
+         data-tags="documenting rules account notes standards usps tracking"
+         data-g="Team Standards">
+        <div class="card-head">
+          <span class="card-ico">📝</span>
+          <div class="card-name">Documenting Rules</div>
+        </div>
+        <div class="card-desc">Account note standards — invoice/claim # requirements, refund calc formatting, USPS tracking, denial record review.</div>
+        <span class="card-tag">Team Standards</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#deferral_codes"
+         style="--c:#2dbf8a"
+         data-name="deferral codes"
+         data-desc="all deferral codes with exact verbiage — 1058 · 1059 · 1060 · 1061 · 1020 · 1033 and when to use each."
+         data-tags="deferral codes 1058 1059 1060 1061 1020 1033 verbiage"
+         data-g="Team Standards">
+        <div class="card-head">
+          <span class="card-ico">⏱</span>
+          <div class="card-name">Deferral Codes</div>
+        </div>
+        <div class="card-desc">All deferral codes with exact verbiage — 1058 · 1059 · 1060 · 1061 · 1020 · 1033 and when to use each.</div>
+        <span class="card-tag">Team Standards</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#tob_codes"
+         style="--c:#2dbf8a"
+         data-name="type of bill codes"
+         data-desc="four-digit ub claim tob codes — inpatient, outpatient, adjustment, void. common examples with refund context."
+         data-tags="type of bill tob codes inpatient outpatient 0111 0131"
+         data-g="Team Standards">
+        <div class="card-head">
+          <span class="card-ico">🏷</span>
+          <div class="card-name">Type of Bill Codes</div>
+        </div>
+        <div class="card-desc">Four-digit UB claim TOB codes — inpatient, outpatient, adjustment, void. Common examples with refund context.</div>
+        <span class="card-tag">Team Standards</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#ar_writeoff"
+         style="--c:#2dbf8a"
+         data-name="ar write-off codes"
+         data-desc="101 adjustment codes for insurance and self-pay write-offs. searchable and filterable by type."
+         data-tags="write off codes adjustment 101 insurance self pay"
+         data-g="Team Standards">
+        <div class="card-head">
+          <span class="card-ico">💲</span>
+          <div class="card-name">AR Write-Off Codes</div>
+        </div>
+        <div class="card-desc">101 adjustment codes for insurance and self-pay write-offs. Searchable and filterable by type.</div>
+        <span class="card-tag">Team Standards</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#availity"
+         style="--c:#2dbf8a"
+         data-name="availity guide"
+         data-desc="resolve · dispute · view details · eligibility · manual add-in — step-by-step for each availity action."
+         data-tags="availity guide resolve dispute eligibility manual add-in"
+         data-g="Team Standards">
+        <div class="card-head">
+          <span class="card-ico">💻</span>
+          <div class="card-name">Availity Guide</div>
+        </div>
+        <div class="card-desc">Resolve · Dispute · View Details · Eligibility · Manual Add-In — step-by-step for each Availity action.</div>
+        <span class="card-tag">Team Standards</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grp" id="grp-Calculations" data-g="Calculations">
+    <div class="grp-hdr" style="border-left-color:#f5c842">
+      <span class="grp-icon">🔢</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#f5c842">Calculations</div>
+        <div class="grp-desc">Live calculators for overpayments, COB, IPPS, and refund worksheets</div>
+      </div>
+      <span class="grp-badge">4 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#ovcalc"
+         style="--c:#f5c842"
+         data-name="overpayment calculator"
+         data-desc="live primary, secondary, and tertiary overpayment calculators. auto-generates copy-ready epic 1081093 note."
+         data-tags="overpayment calculator primary secondary tertiary 1081093"
+         data-g="Calculations">
+        <div class="card-head">
+          <span class="card-ico">💰</span>
+          <div class="card-name">Overpayment Calculator</div>
+        </div>
+        <div class="card-desc">Live Primary, Secondary, and Tertiary overpayment calculators. Auto-generates copy-ready Epic 1081093 note.</div>
+        <span class="card-tag">Calculations</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#refund_worksheet"
+         style="--c:#f5c842"
+         data-name="refund worksheet"
+         data-desc="refund worksheet calculator with all required fields and a statutory deadline calculator."
+         data-tags="refund worksheet calculator deadline"
+         data-g="Calculations">
+        <div class="card-head">
+          <span class="card-ico">📄</span>
+          <div class="card-name">Refund Worksheet</div>
+        </div>
+        <div class="card-desc">Refund worksheet calculator with all required fields and a statutory deadline calculator.</div>
+        <span class="card-tag">Calculations</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#cob"
+         style="--c:#f5c842"
+         data-name="cob calculations"
+         data-desc="cms medicare cob rules — msp · ghp · esrd · liability · medicaid · coverage termed · benefits exhausted · medicare forwarding. searchable."
+         data-tags="cob calculations medicare msp ghp esrd liability medicaid forwarding"
+         data-g="Calculations">
+        <div class="card-head">
+          <span class="card-ico">🔄</span>
+          <div class="card-name">COB Calculations</div>
+        </div>
+        <div class="card-desc">CMS Medicare COB rules — MSP · GHP · ESRD · Liability · Medicaid · Coverage Termed · Benefits Exhausted · Medicare Forwarding. Searchable.</div>
+        <span class="card-tag">Calculations</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#ipps"
+         style="--c:#f5c842"
+         data-name="ipps pricer"
+         data-desc="cms fy 2026 ipps rates, drg payment formula, and cms web pricer link for medicare inpatient validation."
+         data-tags="ipps pricer medicare inpatient drg fy2026 cms"
+         data-g="Calculations">
+        <div class="card-head">
+          <span class="card-ico">🧮</span>
+          <div class="card-name">IPPS Pricer</div>
+        </div>
+        <div class="card-desc">CMS FY 2026 IPPS rates, DRG payment formula, and CMS Web Pricer link for Medicare inpatient validation.</div>
+        <span class="card-tag">Calculations</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grp" id="grp-Compliance" data-g="Compliance">
+    <div class="grp-hdr" style="border-left-color:#e85454">
+      <span class="grp-icon">⚖️</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#e85454">Compliance</div>
+        <div class="grp-desc">Florida statutes, Epic codes reference, and regulatory requirements</div>
+      </div>
+      <span class="grp-badge">2 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#statutes"
+         style="--c:#e85454"
+         data-name="florida statutes §627.6131"
+         data-desc="statutory deadlines, interest rates, 30-month lookback, and live date calculator. one-time contest/deny rule."
+         data-tags="florida statute 627.6131 deadlines 35 days 120 days 30 months interest"
+         data-g="Compliance">
+        <div class="card-head">
+          <span class="card-ico">⚖️</span>
+          <div class="card-name">Florida Statutes §627.6131</div>
+        </div>
+        <div class="card-desc">Statutory deadlines, interest rates, 30-month lookback, and live date calculator. One-time contest/deny rule.</div>
+        <span class="card-tag">Compliance</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#codes"
+         style="--c:#e85454"
+         data-name="epic codes reference"
+         data-desc="all epic activity codes, adjustment codes, and bucket activities used in refund processing — searchable table."
+         data-tags="epic codes reference activity adjustment bucket searchable"
+         data-g="Compliance">
+        <div class="card-head">
+          <span class="card-ico">🗂️</span>
+          <div class="card-name">Epic Codes Reference</div>
+        </div>
+        <div class="card-desc">All Epic activity codes, adjustment codes, and bucket activities used in refund processing — searchable table.</div>
+        <span class="card-tag">Compliance</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grp" id="grp-Unsolicited_Refunds" data-g="Unsolicited Refunds">
+    <div class="grp-hdr" style="border-left-color:#3d9be8">
+      <span class="grp-icon">💵</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#3d9be8">Unsolicited Refunds</div>
+        <div class="grp-desc">Credit balances with no refund request — BCBS, Humana, and general SOP</div>
+      </div>
+      <span class="grp-badge">4 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#unsolicited"
+         style="--c:#3d9be8"
+         data-name="unsolicited refund sop"
+         data-desc="credit balance with no refund request received. criteria, worksheet completion, and full epic sequence."
+         data-tags="unsolicited refund sop credit balance no request"
+         data-g="Unsolicited Refunds">
+        <div class="card-head">
+          <span class="card-ico">💵</span>
+          <div class="card-name">Unsolicited Refund SOP</div>
+        </div>
+        <div class="card-desc">Credit balance with no refund request received. Criteria, worksheet completion, and full Epic sequence.</div>
+        <span class="card-tag">Unsolicited Refunds</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#bcbs_unsol"
+         style="--c:#3d9be8"
+         data-name="bcbs — unsolicited steps"
+         data-desc="availity &quot;message this payer&quot; workflow for bcbs unsolicited overpayment notification with standard verbiage."
+         data-tags="bcbs unsolicited availity message payer verbiage"
+         data-g="Unsolicited Refunds">
+        <div class="card-head">
+          <span class="card-ico">💙</span>
+          <div class="card-name">BCBS — Unsolicited Steps</div>
+        </div>
+        <div class="card-desc">Availity "Message this Payer" workflow for BCBS unsolicited overpayment notification with standard verbiage.</div>
+        <span class="card-tag">Unsolicited Refunds</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#bcbs_rules"
+         style="--c:#3d9be8"
+         data-name="bcbs — rules & key info"
+         data-desc="40-day availity rule · two-policy cob order · medicare with bcbs · denial letter format · invoice color reference."
+         data-tags="bcbs rules 40 day cob order medicare denial letter invoice color"
+         data-g="Unsolicited Refunds">
+        <div class="card-head">
+          <span class="card-ico">💙</span>
+          <div class="card-name">BCBS — Rules & Key Info</div>
+        </div>
+        <div class="card-desc">40-day Availity rule · Two-policy COB order · Medicare with BCBS · Denial letter format · Invoice color reference.</div>
+        <span class="card-tag">Unsolicited Refunds</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#humana_unsol"
+         style="--c:#3d9be8"
+         data-name="humana — unsolicited steps"
+         data-desc="availity dispute claim workflow for humana unsolicited overpayment notification."
+         data-tags="humana unsolicited availity dispute claim"
+         data-g="Unsolicited Refunds">
+        <div class="card-head">
+          <span class="card-ico">🟠</span>
+          <div class="card-name">Humana — Unsolicited Steps</div>
+        </div>
+        <div class="card-desc">Availity Dispute Claim workflow for Humana unsolicited overpayment notification.</div>
+        <span class="card-tag">Unsolicited Refunds</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grp" id="grp-Special_Scenarios" data-g="Special Scenarios">
+    <div class="grp-hdr" style="border-left-color:#ff8a50">
+      <span class="grp-icon">🔀</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#ff8a50">Special Scenarios</div>
+        <div class="grp-desc">Retracting payers, rejected buckets, series accounts, auto insurance, and Medicaid</div>
+      </div>
+      <span class="grp-badge">7 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#retracting"
+         style="--c:#ff8a50"
+         data-name="retracting payers list"
+         data-desc="full list of payers that always retract. never mail a check — retraction process and activity codes."
+         data-tags="retracting payers list bcbs sunshine ambetter never check"
+         data-g="Special Scenarios">
+        <div class="card-head">
+          <span class="card-ico">🔄</span>
+          <div class="card-name">Retracting Payers List</div>
+        </div>
+        <div class="card-desc">Full list of payers that always retract. Never mail a check — retraction process and activity codes.</div>
+        <span class="card-tag">Special Scenarios</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#rejected_bucket"
+         style="--c:#ff8a50"
+         data-name="rejected buckets"
+         data-desc="when rejected buckets appear, what causes them, and how to resolve credits on rejected buckets correctly."
+         data-tags="rejected bucket credit resolve undo billing"
+         data-g="Special Scenarios">
+        <div class="card-head">
+          <span class="card-ico">🪣</span>
+          <div class="card-name">Rejected Buckets</div>
+        </div>
+        <div class="card-desc">When rejected buckets appear, what causes them, and how to resolve credits on rejected buckets correctly.</div>
+        <span class="card-tag">Special Scenarios</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#series_acct"
+         style="--c:#ff8a50"
+         data-name="series accounts"
+         data-desc="lump sum payments across multiple dates of service — primary and secondary payer transfer steps."
+         data-tags="series accounts lump sum multiple dos dates of service"
+         data-g="Special Scenarios">
+        <div class="card-head">
+          <span class="card-ico">📅</span>
+          <div class="card-name">Series Accounts</div>
+        </div>
+        <div class="card-desc">Lump sum payments across multiple dates of service — primary and secondary payer transfer steps.</div>
+        <span class="card-tag">Special Scenarios</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#dual_pay"
+         style="--c:#ff8a50"
+         data-name="dual payments"
+         data-desc="verify and correct payments before posting contractual adjustments. dual coverage and blue-on-blue handling."
+         data-tags="dual payments dual coverage blue on blue remit subscriber"
+         data-g="Special Scenarios">
+        <div class="card-head">
+          <span class="card-ico">💳</span>
+          <div class="card-name">Dual Payments</div>
+        </div>
+        <div class="card-desc">Verify and correct payments before posting contractual adjustments. Dual coverage and Blue-on-Blue handling.</div>
+        <span class="card-tag">Special Scenarios</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#auto_steps"
+         style="--c:#ff8a50"
+         data-name="auto insurance steps"
+         data-desc="auto/wc/liability always primary. florida statute rates, shell coverage registration, and full epic sequence."
+         data-tags="auto insurance workers comp liability always primary florida statute shell"
+         data-g="Special Scenarios">
+        <div class="card-head">
+          <span class="card-ico">🚗</span>
+          <div class="card-name">Auto Insurance Steps</div>
+        </div>
+        <div class="card-desc">Auto/WC/Liability always primary. Florida statute rates, shell coverage registration, and full Epic sequence.</div>
+        <span class="card-tag">Special Scenarios</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#medicaid_cob"
+         style="--c:#ff8a50"
+         data-name="medicaid cob calc"
+         data-desc="medicaid secondary responsibility calculation with live calculator. medicare + medicaid dual-eligible scenarios."
+         data-tags="medicaid cob secondary responsibility calculator dual eligible"
+         data-g="Special Scenarios">
+        <div class="card-head">
+          <span class="card-ico">🟢</span>
+          <div class="card-name">Medicaid COB Calc</div>
+        </div>
+        <div class="card-desc">Medicaid secondary responsibility calculation with live calculator. Medicare + Medicaid dual-eligible scenarios.</div>
+        <span class="card-tag">Special Scenarios</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#ov_calc_format"
+         style="--c:#ff8a50"
+         data-name="overpayment calc format"
+         data-desc="required 1081093 note format by payer type — exact wording, worked examples, short form vs. full calculation."
+         data-tags="overpayment calc format 1081093 wording payer type short form"
+         data-g="Special Scenarios">
+        <div class="card-head">
+          <span class="card-ico">📋</span>
+          <div class="card-name">Overpayment Calc Format</div>
+        </div>
+        <div class="card-desc">Required 1081093 note format by payer type — exact wording, worked examples, short form vs. full calculation.</div>
+        <span class="card-tag">Special Scenarios</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grp" id="grp-Notes" data-g="Notes">
+    <div class="grp-hdr" style="border-left-color:#a0aac8">
+      <span class="grp-icon">📌</span>
+      <div class="grp-info">
+        <div class="grp-name" style="color:#a0aac8">Notes</div>
+        <div class="grp-desc">Personal notes and manager suggestion log</div>
+      </div>
+      <span class="grp-badge">2 sections</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="refund_team_dashboard.html#sticky_notes"
+         style="--c:#a0aac8"
+         data-name="my notes"
+         data-desc="personal session notes tied to any section. create, move, and organize by section. autocomplete enabled."
+         data-tags="my notes personal session autocomplete section"
+         data-g="Notes">
+        <div class="card-head">
+          <span class="card-ico">📌</span>
+          <div class="card-name">My Notes</div>
+        </div>
+        <div class="card-desc">Personal session notes tied to any section. Create, move, and organize by section. Autocomplete enabled.</div>
+        <span class="card-tag">Notes</span>
+      </a>
+      <a class="card" href="refund_team_dashboard.html#manager_notes"
+         style="--c:#a0aac8"
+         data-name="manager suggestions"
+         data-desc="log manager feedback by category with your action/response. filter by category. session-saved."
+         data-tags="manager suggestions feedback category response session"
+         data-g="Notes">
+        <div class="card-head">
+          <span class="card-ico">📋</span>
+          <div class="card-name">Manager Suggestions</div>
+        </div>
+        <div class="card-desc">Log manager feedback by category with your action/response. Filter by category. Session-saved.</div>
+        <span class="card-tag">Notes</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="ftr">My Refund Reference Portal &nbsp;·&nbsp; Credits &amp; Refunds &nbsp;·&nbsp; Created by Joy Watford &nbsp;·&nbsp; Patient Financial Services (Gainesville)</div>
+</div>
+
+<script>
+var activeGroup = 'all';
+
+function filter(g, btn) {
+  activeGroup = g;
+  document.querySelectorAll('.fp').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  search();
+}
+
+function search() {
+  var q = (document.getElementById('q').value || '').toLowerCase().trim();
+  var words = q ? q.split(/\s+/).filter(function(w){ return w.length > 0; }) : [];
+  var shown = 0; var total = 0;
+
+  document.querySelectorAll('.grp').forEach(function(grp) {
+    var gMatch = activeGroup === 'all' || grp.getAttribute('data-g') === activeGroup;
+    var grpHas = false;
+
+    grp.querySelectorAll('.card').forEach(function(card) {
+      total++;
+      var haystack = card.getAttribute('data-name') + ' ' +
+                     card.getAttribute('data-desc') + ' ' +
+                     card.getAttribute('data-tags');
+      var textMatch = !words.length || words.every(function(w){ return haystack.indexOf(w) >= 0; });
+      var show = gMatch && textMatch;
+      card.classList.toggle('hidden', !show);
+      if (show) { grpHas = true; shown++; }
+    });
+
+    grp.classList.toggle('hidden', !grpHas);
+  });
+
+  var rbar = document.getElementById('rbar');
+  var nores = document.getElementById('nores');
+  if (q || activeGroup !== 'all') {
+    rbar.innerHTML = 'Showing <span>' + shown + '</span> of ' + total + ' sections';
+  } else {
+    rbar.innerHTML = '';
+  }
+  nores.style.display = shown === 0 ? 'block' : 'none';
+}
+
+document.querySelectorAll('.card').forEach(function(card) {
+  card.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = this.getAttribute('href');
+  });
+});
+</script>
+</body>
+</html>

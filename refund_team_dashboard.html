@@ -5506,6 +5506,25 @@ Tertiary Ins. Overpaid: $</pre></div>
     window.scrollTo(0, 0);
   }
 
+  // Jump straight to the linked section when arriving via a #section-id URL
+  // (e.g. from the Section Index cards), instead of always showing the default section.
+  (function(){
+    function activateFromHash() {
+      var id = location.hash ? location.hash.slice(1) : '';
+      if (!id) return;
+      var el = document.getElementById(id);
+      if (!el || !el.classList.contains('section')) return;
+      var btn = document.querySelector('nav button[onclick*="show(\'' + id + '\'"]');
+      show(id, btn);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', activateFromHash);
+    } else {
+      activateFromHash();
+    }
+    window.addEventListener('hashchange', activateFromHash);
+  })();
+
   function toggleCheck(li) {
     if (li) li.classList.toggle('checked');
   }

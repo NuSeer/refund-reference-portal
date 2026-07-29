@@ -42,6 +42,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   transition:opacity .15s;
 }
 .open-btn:hover{opacity:.85}
+.open-btn-iq{background:linear-gradient(135deg,#1E6FD9,#00C8E0)}
+.hdr-btns{display:flex;gap:10px;flex-wrap:wrap}
 
 /* BODY */
 .body{padding:28px 32px;max-width:1440px;margin:0 auto}
@@ -145,7 +147,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <span class="si">🔍</span>
     <input class="search-input" id="q" type="text" placeholder="Search sections, codes, topics…" oninput="search()" autocomplete="off">
   </div>
-  <a class="open-btn" href="refund_team_dashboard.html">Open Portal →</a>
+  <div class="hdr-btns">
+    <a class="open-btn open-btn-iq" href="https://refund-iq-platform.vercel.app" target="_blank" rel="noopener">🤖 Open IQ →</a>
+    <a class="open-btn" href="refund_team_dashboard.html">Open Portal →</a>
+  </div>
 </header>
 
 <div class="body">
